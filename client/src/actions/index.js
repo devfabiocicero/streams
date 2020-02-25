@@ -56,6 +56,7 @@ export const editStream = (streamId, formValues) => {
     const response = await streams.put(`/streams/${streamId}`, formValues);
 
     dispatch({ type: EDIT_STREAM, payload: response.data });
+    history.push("/");
   };
 };
 
