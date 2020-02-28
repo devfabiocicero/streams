@@ -8,7 +8,7 @@ import history from "../../history";
 class StreamDelete extends Component {
   componentDidMount() {
     this.props.fetchStream(this.props.match.params.id);
-}
+  }
 
   renderActions = () => (
     <React.Fragment>
