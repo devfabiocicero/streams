@@ -8,7 +8,12 @@ class StreamShow extends Component {
   }
 
   render() {
-    return <div>{this.props.stream.title}</div>;
+    return (
+      <div>
+        Stream Show
+        {this.props.stream && this.props.stream.title}
+      </div>
+    )
   }
 };
 
