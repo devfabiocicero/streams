@@ -24,6 +24,10 @@ class StreamShow extends Component {
     this.flvPlayer.load();
   }
 
+  componentWillUnmount() {
+    this.myPlayer.destroy();
+  }
+
   render() {
     const { stream } = this.props;
     if (!stream) {
