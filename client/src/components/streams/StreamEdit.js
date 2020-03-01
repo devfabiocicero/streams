@@ -1,37 +1,55 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import _ from "lodash";
-import { fetchStream, editStream } from "../../actions";
-import StreamForm from "./StreamForm";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import _ from 'lodash';
+import { fetchStream, editStream } from '../../actions';
+import StreamForm from './StreamForm';
 
 class StreamEdit extends Component {
   componentDidMount() {
-    this.props.fetchStream(this.props.match.params.id);
+    const { fetchStream: fetchStreamConnect, match } = this.props;
+    const { id } = match.params;
+    fetchStreamConnect(id);
   }
 
-  onFormSubmit = formValues => {
-    this.props.editStream(this.props.stream.id, formValues);
+  onFormSubmit = (formValues) => {
+    const { editStream: editStreamConnect, stream } = this.props;
+    editStreamConnect(stream.id, formValues);
   };
 
   render() {
+    const { stream } = this.props;
     return (
       <div>
         <h3>Edit a Stream</h3>
         <StreamForm
-          initialValues={_.pick(this.props.stream, "title", "description")}
+          initialValues={_.pick(stream, 'title', 'description')}
           onSubmit={this.onFormSubmit}
-        ></StreamForm>
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    stream: state.streams[ownProps.match.params.id]
-  };
+StreamEdit.propTypes = {
+  fetchStream: PropTypes.func.isRequired,
+  editStream: PropTypes.func.isRequired,
+  stream: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }).isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.node,
+    }).isRequired,
+  }).isRequired,
 };
 
+const mapStateToProps = (state, ownProps) => ({
+  stream: state.streams[ownProps.match.params.id],
+});
+
 export default connect(mapStateToProps, { fetchStream, editStream })(
-  StreamEdit
+  StreamEdit,
 );

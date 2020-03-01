@@ -1,11 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { createStream } from "../../actions";
-import StreamForm from "./StreamForm";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStream } from '../../actions';
+import StreamForm from './StreamForm';
 
 class StreamCreate extends Component {
-  onFormSubmit = formValues => {
-    this.props.createStream(formValues);
+  onFormSubmit = (formValues) => {
+    const { createStream: createStreamConnect } = this.props;
+    createStreamConnect(formValues);
   };
 
   render() {
@@ -17,5 +19,9 @@ class StreamCreate extends Component {
     );
   }
 }
+
+StreamCreate.propTypes = {
+  createStream: PropTypes.func.isRequired,
+};
 
 export default connect(null, { createStream })(StreamCreate);

@@ -1,28 +1,38 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchStream, deleteStream } from "../../actions";
-import Modal from "../Modal";
-import history from "../../history";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { fetchStream, deleteStream } from '../../actions';
+import Modal from '../Modal';
+import history from '../../history';
 
 class StreamDelete extends Component {
   componentDidMount() {
-    this.props.fetchStream(this.props.match.params.id);
+    const { fetchStream: fetchStreamConnect, match } = this.props;
+    const { id } = match.params;
+    fetchStreamConnect(id);
   }
 
-  renderActions = () => (
-    <React.Fragment>
-      <button onClick={() => this.props.deleteStream(this.props.match.params.id)} className="ui primary button">Delete</button>
-      <Link to="/" className="ui button">Cancel</Link>
-    </React.Fragment>
-  );
+  renderActions = () => {
+    const { deleteStream: deleteStreamConnect, match } = this.props;
+    const { id } = match.params;
+
+    return (
+      <>
+        <button type="button" onClick={() => deleteStreamConnect(id)} className="ui primary button">Delete</button>
+        <Link to="/" className="ui button">Cancel</Link>
+      </>
+    );
+  };
 
   renderContent = () => {
-    if (!this.props.stream) {
-      return "Are you sure you want to delete this stream?";
+    const { stream } = this.props;
+
+    if (!stream) {
+      return 'Are you sure you want to delete this stream?';
     }
 
-    return `Are you sure you want to delete ${this.props.stream.title}?`;
+    return `Are you sure you want to delete ${stream.title}?`;
   };
 
   render() {
@@ -32,17 +42,34 @@ class StreamDelete extends Component {
           title="Delete Stream"
           content={this.renderContent()}
           actions={this.renderActions()}
-          onDismiss={() => history.push("/")}
+          onDismiss={() => history.push('/')}
         />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    stream: state.streams[ownProps.match.params.id]
-  };
+StreamDelete.defaultProps = {
+  stream: null,
 };
+
+StreamDelete.propTypes = {
+  fetchStream: PropTypes.func.isRequired,
+  deleteStream: PropTypes.func.isRequired,
+  stream: PropTypes.shape({
+    id: PropTypes.number,
+    title: PropTypes.string,
+    description: PropTypes.string,
+  }),
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.node,
+    }).isRequired,
+  }).isRequired,
+};
+
+const mapStateToProps = (state, ownProps) => ({
+  stream: state.streams[ownProps.match.params.id],
+});
 
 export default connect(mapStateToProps, { fetchStream, deleteStream })(StreamDelete);
