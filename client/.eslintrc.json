@@ -1,17 +1,19 @@
 {
+  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "es6": true,
     "jest": true
   },
-  "extends": ["plugin:react/recommended", "airbnb"],
+  "extends": ["plugin:react/recommended", "airbnb", "plugin:json/recommended"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "js": true
     },
     "ecmaVersion": 2018,
     "sourceType": "module"

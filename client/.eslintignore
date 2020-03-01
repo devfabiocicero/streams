@@ -7,8 +7,6 @@
 !*.json
 !*.jsx
 !*.less
-!*.md
-!*.mdx
 !*.ts
 !*.tsx
 !*.yml
@@ -35,4 +33,4 @@ node_modules/
 .env
 
 ## shared between eslint and prettier
-# [a few more paths]
+public/
